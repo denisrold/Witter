@@ -12,7 +12,6 @@ export default function LoginPage({ providers }) {
     router.push("/");
   }
   //
-
   return (
     <div className="flex items-center justify-center h-screen">
       {Object.values(providers).map((provider) => (
