@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 
-export function initMongoose() {
+export async function initMongoose() {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection.asPromise();
+  }
   //DB CONNECT
-  mongoose.connect(procces.env.MONGODB_URI);
+  await mongoose.connect(process.env.MONGODB_URI);
 }

@@ -1,7 +1,11 @@
-import mongoose from "mongoose";
+import User from "../../models/users";
+import { initMongoose } from "../../lib/mongoose";
 
-export default function handle(req, res) {
-  //DB CONNECT
-  mongoose.connect(procces.env.MONGODB_URI);
-  res.json("ok");
+export default async function handle(req, res) {
+  await initMongoose();
+  const id = req.query.id;
+
+  const user = await User.findById(id);
+  console.log(user);
+  res.json({ user });
 }
