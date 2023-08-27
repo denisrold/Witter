@@ -6,6 +6,6 @@ export default async function handle(req, res) {
   const id = req.query.id;
 
   const user = await User.findById(id);
-  console.log(user);
   res.json({ user });
 }
+//MINUTO 38:38
