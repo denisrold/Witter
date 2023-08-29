@@ -4,11 +4,14 @@ import Post from "@/models/Post";
 export default async function handler(req, res) {
   await initMongoose();
 
-  //   if (req.method === "POST") {
-  //     const { text } = req.body;
-  //     Post.create({
-  //       author: 1,
-  //       text,
-  //     });
-  //   }
+  if (req.method === "POST") {
+    const { text } = req.body;
+    const { userId } = req.body;
+
+    const post = await Post.create({
+      author: userId,
+      text,
+    });
+    res.json(post);
+  }
 }
