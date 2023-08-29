@@ -6,10 +6,12 @@ import axios from "axios";
 
 export default function Home() {
   const { userInfo, status: userInfoStatus } = useUserInfo();
-  const [post, setPost] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   async function fetchHomePost() {
-    const post = await axios.get("/api/posts").then((post) => setPost(post));
+    const post = await axios
+      .get("/api/posts")
+      .then((response) => setPosts(response.data));
   }
   useEffect(() => {
     fetchHomePost();
@@ -23,10 +25,15 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-xl mx-auto border-l border-r border-twitterBorder min-h-screen">
+    <div className="max-w-lg mx-auto border-l border-r border-twitterBorder min-h-screen">
       <h1 className="text-lg font-bold p-4">Home</h1>
       <PostForm />
-      <div className="">all Post</div>
+      <div className="">
+        {posts.length &&
+          posts.map((p) => {
+            return <div className="">{p.text}</div>;
+          })}
+      </div>
     </div>
   );
 }
