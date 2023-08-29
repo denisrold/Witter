@@ -3,6 +3,7 @@ import useUserInfo from "@/hooks/useUserInfo";
 import PostForm from "@/components/PostForm";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import PostContent from "@/components/PostContent";
 
 export default function Home() {
   const { userInfo, status: userInfoStatus } = useUserInfo();
@@ -36,7 +37,9 @@ export default function Home() {
         {posts.length &&
           posts.map((p) => {
             return (
-              <div className="border-t border-twitterBorder p-5">{p.text}</div>
+              <div className="border-t border-twitterBorder p-5">
+                <PostContent {...p} />
+              </div>
             );
           })}
       </div>

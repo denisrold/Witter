@@ -4,7 +4,12 @@ import Post from "@/models/Post";
 export default async function handler(req, res) {
   await initMongoose();
   if (req.method === "GET") {
-    res.json(await Post.find().sort({ createdAt: -1 }).exec());
+    const posts = await Post.find()
+      .populate("author")
+      .sort({ createdAt: -1 })
+      .exec();
+
+    res.json(posts);
   }
 
   if (req.method === "POST") {
