@@ -1,9 +1,19 @@
 import useUserInfo from "@/hooks/useUserInfo";
+import { useState } from "react";
 
 export default function PostForm() {
-  const { userInfo } = useUserInfo();
+  const [text, setText] = useState("");
+  const { userInfo, status } = useUserInfo();
+  if (status === "loading") {
+    return "";
+  }
+  function handlePostSubmit(e) {
+    e.preventDefault();
+    console.log({ text });
+  }
+
   return (
-    <form className="mx-4">
+    <form className="mx-4" onSubmit={handlePostSubmit}>
       <div className="flex">
         <div>
           <div className="rounded-full overflow-hidden w-12">
@@ -14,6 +24,8 @@ export default function PostForm() {
           <textarea
             className="w-full p-2 bg-transparent text-twitterWhite"
             placeholder={"What's happening?"}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
           />
           <div className="text-right border-t border-twitterBorder pt-2">
             <button className="bg-twitterBlue text-white px-5 py-2 rounded-full">
