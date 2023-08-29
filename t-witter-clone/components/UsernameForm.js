@@ -1,8 +1,10 @@
 import useUserInfo from "../hooks/useUserInfo";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function UsernameForm() {
+  const router = useRouter();
   const { userInfo, status } = useUserInfo();
   const [username, setUserName] = useState("");
   const { data } = useSession();
@@ -27,6 +29,7 @@ export default function UsernameForm() {
       },
       body: JSON.stringify({ username, user }),
     });
+    router.reload();
   }
 
   if (status === "loading") {

@@ -11,5 +11,9 @@ export default function Home() {
     return <UsernameForm />;
   }
 
-  return <div className="flex items-center justify-center h-screen">Home</div>;
+  return (
+    <div className="flex items-center justify-center h-screen">
+      Home Page Logged in {userInfo.username}
+    </div>
+  );
 }
