@@ -1,9 +1,12 @@
 import useUserInfo from "../hooks/useUserInfo";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 export default function UsernameForm() {
   const { userInfo, status } = useUserInfo();
   const [username, setUserName] = useState("");
+  const { data } = useSession();
+  const { user } = data;
 
   useEffect(() => {
     if (status === "loading") {
@@ -15,9 +18,15 @@ export default function UsernameForm() {
     }
   }, [status]);
 
-  function handleFormSubmit(e) {
+  async function handleFormSubmit(e) {
     e.preventDefault();
-    console.log(username);
+    fetch("/api/users", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, user }),
+    });
   }
 
   if (status === "loading") {
