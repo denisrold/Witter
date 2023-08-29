@@ -1,3 +1,7 @@
+import { useRouter } from "next/router";
 export default function PostPage() {
-  return "hello";
+  const router = useRouter();
+  const { id } = router.query;
+
+  return <div>{id}</div>;
 }
