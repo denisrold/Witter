@@ -8,7 +8,6 @@ export default function UsernameForm() {
   const { userInfo, status } = useUserInfo();
   const [username, setUserName] = useState("");
   const { data } = useSession();
-  const { user } = data;
 
   useEffect(() => {
     if (status === "loading") {
@@ -21,6 +20,7 @@ export default function UsernameForm() {
   }, [status]);
 
   async function handleFormSubmit(e) {
+    const { user } = data;
     e.preventDefault();
     fetch("/api/users", {
       method: "PUT",
