@@ -13,6 +13,7 @@ export default function PostForm() {
     e.preventDefault();
     const userId = userInfo._id;
     await axios.post("/api/posts", { text, userId });
+    setText("");
   }
 
   return (
@@ -30,7 +31,7 @@ export default function PostForm() {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-          <div className="text-right border-t border-twitterBorder pt-2">
+          <div className="text-right border-t border-twitterBorder pt-2 pb-2">
             <button className="bg-twitterBlue text-white px-5 py-2 rounded-full">
               tweet
             </button>

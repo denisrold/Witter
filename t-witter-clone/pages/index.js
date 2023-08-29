@@ -31,7 +31,9 @@ export default function Home() {
       <div className="">
         {posts.length &&
           posts.map((p) => {
-            return <div className="">{p.text}</div>;
+            return (
+              <div className="border-t border-twitterBorder p-5">{p.text}</div>
+            );
           })}
       </div>
     </div>
