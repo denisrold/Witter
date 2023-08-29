@@ -27,7 +27,11 @@ export default function Home() {
   return (
     <div className="max-w-lg mx-auto border-l border-r border-twitterBorder min-h-screen">
       <h1 className="text-lg font-bold p-4">Home</h1>
-      <PostForm />
+      <PostForm
+        onPost={() => {
+          fetchHomePost();
+        }}
+      />
       <div className="">
         {posts.length &&
           posts.map((p) => {

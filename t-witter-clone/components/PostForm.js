@@ -2,7 +2,7 @@ import useUserInfo from "@/hooks/useUserInfo";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export default function PostForm() {
+export default function PostForm({ onPost }) {
   const [text, setText] = useState("");
   const { userInfo, status } = useUserInfo();
   if (status === "loading") {
@@ -14,6 +14,9 @@ export default function PostForm() {
     const userId = userInfo._id;
     await axios.post("/api/posts", { text, userId });
     setText("");
+    if (onPost) {
+      onPost();
+    }
   }
 
   return (
