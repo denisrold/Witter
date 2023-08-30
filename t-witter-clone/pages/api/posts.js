@@ -5,15 +5,16 @@ import Like from "@/models/Like";
 export default async function handler(req, res) {
   await initMongoose();
   if (req.method === "GET") {
+    let userId = "";
+    if (req.query.userId != "undefined") {
+      userId = req.query.userId;
+    }
     const id = req.query.id;
+
     if (id) {
       const post = await Post.findById(id).populate("author");
       res.json(post);
     } else {
-      let userId = "";
-      if (req.query.userId != "undefined") {
-        userId = req.query.userId;
-      }
       const posts = await Post.find()
         .populate("author")
         .sort({ createdAt: -1 })

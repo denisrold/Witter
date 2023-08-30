@@ -82,8 +82,8 @@ export default function PostButtons({
         </svg>
         <span className="">
           <FlipNumbers
-            height={13}
-            width={13}
+            height={12.5}
+            width={12}
             play
             perspective={100}
             numbers={likesCounts.toString()}
