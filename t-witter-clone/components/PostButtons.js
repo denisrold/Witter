@@ -11,6 +11,7 @@ export default function PostButtons({
   const { userInfo, status } = useUserInfo();
   const [likesCounts, setLikesCounts] = useState(likesCountsDefault);
   const [likedByMe, setLikedByMe] = useState(likedByMeDefault);
+
   async function toggleLike() {
     const userId = userInfo._id;
     const response = await axios.post("/api/like", { id: id, userId });

@@ -9,15 +9,23 @@ import Layout from "@/components/Layout";
 export default function Home() {
   const { userInfo, status: userInfoStatus } = useUserInfo();
   const [posts, setPosts] = useState([]);
+  const [idsLikedByMe, setIdsLikeByMe] = useState("");
 
   async function fetchHomePost() {
+    const userId = await userInfo?._id;
     const post = await axios
-      .get("/api/posts")
-      .then((response) => setPosts(response.data));
+      .get(`/api/posts?userId=${userId}`)
+      .then((response) => {
+        setPosts(response.data.posts);
+        setIdsLikeByMe(response.data.idsLikedByMe);
+      });
   }
+
   useEffect(() => {
-    fetchHomePost();
-  }, []);
+    if (userInfoStatus != "loading") {
+      fetchHomePost();
+    }
+  }, [userInfoStatus]);
 
   if (userInfoStatus === "loading") {
     return "loading user info";
@@ -34,12 +42,12 @@ export default function Home() {
           fetchHomePost();
         }}
       />
-      <div className="">
+      <div className={`${!posts.length ? "hidden " : ""}`}>
         {posts.length &&
           posts.map((p) => {
             return (
               <div className="border-t border-twitterBorder p-5">
-                <PostContent {...p} />
+                <PostContent {...p} likedByMe={idsLikedByMe.includes(p._id)} />
               </div>
             );
           })}

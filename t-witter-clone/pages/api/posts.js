@@ -1,21 +1,33 @@
 import { initMongoose } from "@/lib/mongoose";
 import Post from "../../models/Post";
+import Like from "@/models/Like";
 
 export default async function handler(req, res) {
   await initMongoose();
   if (req.method === "GET") {
-    const { id } = req.query;
+    const id = req.query.id;
     if (id) {
       const post = await Post.findById(id).populate("author");
       res.json(post);
-      //   const post = await Post.findById(id).populate("author");
-      //   res.json({ post });
     } else {
+      let userId = "";
+      if (req.query.userId != "undefined") {
+        userId = req.query.userId;
+      }
       const posts = await Post.find()
         .populate("author")
         .sort({ createdAt: -1 })
+        .limit(20)
         .exec();
-      res.json(posts);
+
+      const postIds = posts.map((p) => p._id);
+      const postLikedByMe = await Like.find({
+        author: userId,
+        post: { $in: postIds },
+      });
+
+      const idsLikedByMe = postLikedByMe.map((like) => like.post);
+      res.json({ posts, idsLikedByMe });
     }
   }
 
