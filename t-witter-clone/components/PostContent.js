@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Avatar from "./Avatar";
 import ReactTimeAgo from "react-time-ago";
+import PostButtons from "./PostButtons";
 
 export default function PostContent({
   text,
@@ -12,11 +13,11 @@ export default function PostContent({
   const createdAtDate = new Date(createdAt);
   return (
     <div>
-      <div className="flex">
+      <div className="flex w-full">
         <div>
           <Avatar src={author?.image} />
         </div>
-        <div className="pl-2">
+        <div className="pl-2 grow">
           <div>
             <span className="pr-1 font-bold">{author?.name}</span>
             {big && <br />}
@@ -30,6 +31,7 @@ export default function PostContent({
           {!big && (
             <div>
               <Link href={`/${author?.username}/status/${_id}`}>{text}</Link>
+              <PostButtons />
             </div>
           )}
         </div>
@@ -48,6 +50,7 @@ export default function PostContent({
                 .join(" ")}
             </div>
           )}
+          <PostButtons />
         </div>
       )}
     </div>
