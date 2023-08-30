@@ -1,5 +1,12 @@
 import { initMongoose } from "@/lib/mongoose";
 import Like from "@/models/Like";
+import Post from "@/models/Post";
+
+async function updateLikesCount(postId) {
+  const post = await Post.findById(postId);
+  post.likesCount = await Like.countDocuments({ post: postId });
+  await post.save();
+}
 
 export default async function handle(req, res) {
   initMongoose();
@@ -8,10 +15,11 @@ export default async function handle(req, res) {
   const existingLike = await Like.findOne({ author: userId, post: postId });
   if (existingLike) {
     await existingLike.remove();
+    await updateLikesCount(postId);
     res.json(null);
   } else {
     const like = await Like.create({ author: userId, post: postId });
+    await updateLikesCount(postId);
     res.json({ like });
   }
-  res.json({ postId, userId });
 }
