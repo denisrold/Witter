@@ -31,7 +31,7 @@ export default function PostContent({
           {!big && (
             <div>
               <Link href={`/${author?.username}/status/${_id}`}>{text}</Link>
-              <PostButtons />
+              <PostButtons id={_id} />
             </div>
           )}
         </div>
@@ -50,7 +50,7 @@ export default function PostContent({
                 .join(" ")}
             </div>
           )}
-          <PostButtons />
+          <PostButtons id={_id} />
         </div>
       )}
     </div>
