@@ -6,6 +6,7 @@ import Avatar from "./Avatar";
 export default function PostForm({
   onPost,
   compact,
+  parent,
   placeholder = "What's happening?",
 }) {
   const [text, setText] = useState("");
@@ -17,7 +18,7 @@ export default function PostForm({
   async function handlePostSubmit(e) {
     e.preventDefault();
     const userId = userInfo?._id;
-    await axios.post("/api/posts", { text, userId });
+    await axios.post("/api/posts", { text, userId, parent });
     setText("");
     if (onPost) {
       onPost();

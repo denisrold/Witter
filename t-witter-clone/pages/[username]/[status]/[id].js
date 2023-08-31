@@ -55,10 +55,12 @@ export default function PostPage() {
           <PostForm
             onPost={() => {}}
             compact
+            parent={id}
             placeholder={"Tweet your reply"}
           />
         </div>
       )}
+      <div>Repplies goes here</div>
     </Layout>
   );
 }
