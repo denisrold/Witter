@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import TopNavLink from "@/components/TopNavLink";
+import Cover from "@/components/cover";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -25,6 +26,7 @@ export default function UserPage() {
           <div className="px-5 pt-2">
             <TopNavLink title={profileInfo.name} />
           </div>
+          <Cover />
         </div>
       )}
     </Layout>
