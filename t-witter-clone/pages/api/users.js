@@ -4,8 +4,8 @@ import { initMongoose } from "../../lib/mongoose";
 export default async function handle(req, res) {
   await initMongoose();
   if (req.method === "GET") {
-    const id = req.query.id;
-    const user = await User.findById(id);
+    const { id, username } = req.query;
+    const user = await User.findOne({ id, username });
     res.json({ user });
   }
 

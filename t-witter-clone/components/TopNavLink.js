@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function TopNavLink(title = Tweet, url = "/") {
+export default function TopNavLink({ title = "Tweet", url = "/" }) {
   return (
     <Link href={url}>
       <div className="flex mb-5 cursor-pointer">
@@ -10,7 +10,7 @@ export default function TopNavLink(title = Tweet, url = "/") {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="w-6 h-6 mr-3"
+          className="w-5 h-5 mt-1 mr-3"
         >
           <path
             strokeLinecap="round"
