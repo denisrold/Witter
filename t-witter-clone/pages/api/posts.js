@@ -18,9 +18,8 @@ export default async function handler(req, res) {
       res.json(post);
     } else {
       const parent = req.query.parent || null;
-      const author = req.query.author.split("AND")[0];
-      const userId = req.query.author.split("AND")[1];
-      console.log(userId);
+      const author = req.query?.author?.split("AND")[0] || null;
+      const userID = req.query?.author?.split("AND")[1] || null;
 
       const searchFilter = author ? { author } : { parent };
       const posts = await Post.find(searchFilter)
@@ -29,9 +28,10 @@ export default async function handler(req, res) {
         .limit(20)
         .exec();
 
+      const ID = userID ? userID : userId;
       const postIds = posts.map((p) => p._id);
       const postLikedByMe = await Like.find({
-        author: userId,
+        author: ID,
         post: { $in: postIds },
       });
 

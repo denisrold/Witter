@@ -15,7 +15,11 @@ export default function UserPage() {
   const [profileInfo, setProfileInfo] = useState();
   const [posts, setPosts] = useState([]);
   const [postsLikedByMe, setPostsLikedByMe] = useState([]);
-
+  async function fetchProfile() {
+    await axios.get("/api/users?username=" + username).then((response) => {
+      setProfileInfo(response.data.user);
+    });
+  }
   async function fetchProfilePosts() {
     await axios
       .get("/api/posts?author=" + profileInfo?._id + "AND" + userInfo?._id)
@@ -29,10 +33,9 @@ export default function UserPage() {
     if (!username) {
       return;
     }
-    axios.get("/api/users?username=" + username).then((response) => {
-      setProfileInfo(response.data.user);
-    });
+    fetchProfile();
   }, [username]);
+
   useEffect(() => {
     if (!profileInfo?._id) {
       return;
@@ -40,7 +43,7 @@ export default function UserPage() {
     if (userInfo && userInfoStatus != "loading") {
       fetchProfilePosts();
     }
-  }, [userInfo]);
+  }, [userInfo || profileInfo]);
 
   return (
     <Layout>
