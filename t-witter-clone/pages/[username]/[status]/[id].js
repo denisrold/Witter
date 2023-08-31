@@ -4,10 +4,13 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import Link from "next/link";
+import useUserInfo from "@/hooks/useUserInfo";
+import PostForm from "@/components/PostForm";
 export default function PostPage() {
   const router = useRouter();
   const { id } = router.query;
   const [post, setPost] = useState();
+  const { userInfo } = useUserInfo();
 
   async function getPost() {
     const post = await axios.get("/api/posts?id=" + id).then((response) => {
@@ -45,6 +48,15 @@ export default function PostPage() {
             </div>
           </Link>
           <PostContent {...post} big={true} />
+        </div>
+      )}
+      {!!userInfo && (
+        <div className="border-t border-twitterBorder p-5">
+          <PostForm
+            onPost={() => {}}
+            compact
+            placeholder={"Tweet your reply"}
+          />
         </div>
       )}
     </Layout>
