@@ -5,11 +5,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PostContent from "@/components/PostContent";
 import Layout from "@/components/Layout";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Home() {
-  const { userInfo, status: userInfoStatus } = useUserInfo();
+  const { userInfo, setUserInfo, status: userInfoStatus } = useUserInfo();
   const [posts, setPosts] = useState([]);
   const [idsLikedByMe, setIdsLikeByMe] = useState("");
+
+  const { data: session } = useSession();
 
   async function fetchHomePost() {
     const userId = await userInfo?._id;
@@ -20,9 +23,13 @@ export default function Home() {
         setIdsLikeByMe(response.data.idsLikedByMe);
       });
   }
+  async function logOut() {
+    setUserInfo(null);
+    //await signOut();
+  }
 
   useEffect(() => {
-    if (userInfoStatus != "loading") {
+    if (userInfo && userInfoStatus != "loading") {
       fetchHomePost();
     }
   }, [userInfoStatus]);
@@ -30,12 +37,13 @@ export default function Home() {
   if (userInfoStatus === "loading") {
     return "loading user info";
   }
-  if (!userInfo.username) {
+  if (userInfo && !userInfo?.username) {
     return <UsernameForm />;
   }
 
   return (
     <Layout>
+      {session?.user?._id}
       <h1 className="text-lg font-bold p-4">Home</h1>
       <PostForm
         onPost={() => {
@@ -51,6 +59,16 @@ export default function Home() {
               </div>
             );
           })}
+      </div>
+      <div className="p-5 text-center border-t border-twitterBorder">
+        {userInfo && (
+          <button
+            onClick={logOut}
+            className="bg-twitterWhite text-black rounded-full px-5 py-1"
+          >
+            Logout
+          </button>
+        )}
       </div>
     </Layout>
   );

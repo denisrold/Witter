@@ -12,7 +12,7 @@ export default function PostForm({ onPost }) {
 
   async function handlePostSubmit(e) {
     e.preventDefault();
-    const userId = userInfo._id;
+    const userId = userInfo?._id;
     await axios.post("/api/posts", { text, userId });
     setText("");
     if (onPost) {
