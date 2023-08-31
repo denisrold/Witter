@@ -6,11 +6,13 @@ import axios from "axios";
 import PostContent from "@/components/PostContent";
 import Layout from "@/components/Layout";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const { userInfo, setUserInfo, status: userInfoStatus } = useUserInfo();
   const [posts, setPosts] = useState([]);
   const [idsLikedByMe, setIdsLikeByMe] = useState("");
+  const router = useRouter();
 
   const { data: session } = useSession();
 
@@ -40,10 +42,12 @@ export default function Home() {
   if (userInfo && !userInfo?.username) {
     return <UsernameForm />;
   }
-
+  if (!userInfo) {
+    router.push("/login");
+    return "Not user Info;";
+  }
   return (
     <Layout>
-      {session?.user?._id}
       <h1 className="text-lg font-bold p-4">Home</h1>
       <PostForm
         onPost={() => {

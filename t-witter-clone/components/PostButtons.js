@@ -62,7 +62,7 @@ export default function PostButtons({
       </button>
       <button
         className={
-          (likedByMe ? "text-red-500 fill-red-500 " : "") + "flex items-center"
+          (likedByMe ? " text-red-500 fill-red-500 " : "") + "flex items-center"
         }
         onClick={toggleLike}
       >
@@ -72,7 +72,7 @@ export default function PostButtons({
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-5 h-5 fill-inherit"
+          class="w-5 h-5 fill-inherit  hover:text-red-500"
         >
           <path
             stroke-linecap="round"
