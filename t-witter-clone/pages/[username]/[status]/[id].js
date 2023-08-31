@@ -10,18 +10,24 @@ export default function PostPage() {
   const router = useRouter();
   const { id } = router.query;
   const [post, setPost] = useState();
+  const [replies, setReplies] = useState([]);
+  const [repliesLikedByMe, setRepliesLikedByMe] = useState([]);
   const { userInfo } = useUserInfo();
 
-  async function getPost() {
-    const post = await axios.get("/api/posts?id=" + id).then((response) => {
+  async function fetchData() {
+    await axios.get("/api/posts?id=" + id).then((response) => {
       setPost(response.data);
+    });
+    await axios.get("/api/posts?parent=" + id).then((response) => {
+      setReplies(response.data.posts);
+      setRepliesLikedByMe(response.data.idsLikedByMe);
     });
   }
   useEffect(() => {
     if (!id) {
       return;
     }
-    getPost();
+    fetchData();
   }, [id]);
 
   return (
@@ -53,14 +59,26 @@ export default function PostPage() {
       {!!userInfo && (
         <div className="border-t border-twitterBorder p-5">
           <PostForm
-            onPost={() => {}}
+            onPost={fetchData}
             compact
             parent={id}
             placeholder={"Tweet your reply"}
           />
         </div>
       )}
-      <div>Repplies goes here</div>
+      <div>
+        {replies.length > 0 &&
+          replies.map((reply) => {
+            return (
+              <div className="p-5 border-t border-twitterBorder">
+                <PostContent
+                  {...reply}
+                  likedByMe={repliesLikedByMe.includes(reply._id)}
+                />
+              </div>
+            );
+          })}
+      </div>
     </Layout>
   );
 }

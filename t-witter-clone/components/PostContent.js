@@ -10,6 +10,7 @@ export default function PostContent({
   _id,
   likesCount,
   likedByMe,
+  commentsCount,
   big = false,
 }) {
   const createdAtDate = new Date(createdAt);
@@ -37,6 +38,7 @@ export default function PostContent({
                 id={_id}
                 likesCounts={likesCount}
                 likedByMe={likedByMe}
+                commentsCount={commentsCount}
               />
             </div>
           )}
@@ -44,7 +46,9 @@ export default function PostContent({
       </div>
       {big && (
         <div className="mt-2">
-          <Link href={`/${author?.username}/status/${_id}`}>{text}</Link>
+          <Link href={`/${author?.username}/status/${_id}`}>
+            <div className="w-full">{text}</div>
+          </Link>
           {createdAt && (
             <div className="text-twitterLightGray text-sm">
               {new Date(createdAt)
@@ -60,6 +64,7 @@ export default function PostContent({
             id={_id}
             likesCounts={likesCount}
             likedByMe={likedByMe}
+            commentsCount={commentsCount}
           />
         </div>
       )}

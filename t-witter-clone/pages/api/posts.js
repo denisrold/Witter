@@ -17,7 +17,8 @@ export default async function handler(req, res) {
 
       res.json(post);
     } else {
-      const posts = await Post.find()
+      const parent = req.query.parent || null;
+      const posts = await Post.find({ parent: parent })
         .populate("author")
         .sort({ createdAt: -1 })
         .limit(20)
@@ -36,12 +37,18 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     const { text, parent, userId } = req.body;
-    console.log(parent);
     const post = await Post.create({
       author: userId,
       text,
       parent,
     });
+
+    if (parent) {
+      const parentPost = await Post.findById(parent);
+      parentPost.commentsCount = await Post.countDocuments({ parent });
+      await parentPost.save();
+    }
+
     res.json(post);
   }
 }
