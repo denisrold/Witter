@@ -18,7 +18,12 @@ export default async function handler(req, res) {
       res.json(post);
     } else {
       const parent = req.query.parent || null;
-      const posts = await Post.find({ parent: parent })
+      const author = req.query.author.split("AND")[0];
+      const userId = req.query.author.split("AND")[1];
+      console.log(userId);
+
+      const searchFilter = author ? { author } : { parent };
+      const posts = await Post.find(searchFilter)
         .populate("author")
         .sort({ createdAt: -1 })
         .limit(20)

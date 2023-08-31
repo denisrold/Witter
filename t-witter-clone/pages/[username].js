@@ -1,15 +1,29 @@
 import Avatar from "@/components/Avatar";
 import Layout from "@/components/Layout";
 import TopNavLink from "@/components/TopNavLink";
-import Cover from "@/components/cover";
+import Cover from "@/components/Cover";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import PostContent from "@/components/PostContent";
+import useUserInfo from "@/hooks/useUserInfo";
 
 export default function UserPage() {
+  const { userInfo, status: userInfoStatus } = useUserInfo();
   const router = useRouter();
   const { username } = router.query;
   const [profileInfo, setProfileInfo] = useState();
+  const [posts, setPosts] = useState([]);
+  const [postsLikedByMe, setPostsLikedByMe] = useState([]);
+
+  async function fetchProfilePosts() {
+    await axios
+      .get("/api/posts?author=" + profileInfo?._id + "AND" + userInfo?._id)
+      .then((response) => {
+        setPosts(response.data.posts);
+        setPostsLikedByMe(response.data.idsLikedByMe);
+      });
+  }
 
   useEffect(() => {
     if (!username) {
@@ -19,6 +33,14 @@ export default function UserPage() {
       setProfileInfo(response.data.user);
     });
   }, [username]);
+  useEffect(() => {
+    if (!profileInfo?._id) {
+      return;
+    }
+    if (userInfo && userInfoStatus != "loading") {
+      fetchProfilePosts();
+    }
+  }, [userInfo]);
 
   return (
     <Layout>
@@ -41,11 +63,25 @@ export default function UserPage() {
             </div>
           </div>
           <div className="px-5 mt-2">
-            <h1 className="">{profileInfo?.name}</h1>
-            <h2 className="">@{profileInfo?.username}</h2>
+            <h1 className="font-bold text-xl leading-5">{profileInfo?.name}</h1>
+            <h2 className="text-twitterLightGray text-sm">
+              @{profileInfo?.username}
+            </h2>
+            <div className="text-sm mt-2 mb-2">Mars & Cars, Chips & Dips</div>
           </div>
         </div>
       )}
+      {posts?.length > 0 &&
+        posts.map((post) => {
+          return (
+            <div className="p-5 border-t border-twitterBorder" key={post._id}>
+              <PostContent
+                {...post}
+                likedByMe={postsLikedByMe.includes(post._id)}
+              />
+            </div>
+          );
+        })}
     </Layout>
   );
 }
