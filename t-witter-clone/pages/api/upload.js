@@ -20,9 +20,10 @@ export default async function handle(req, res) {
     }
 
     const fileInfo = files["cover"][0];
-    console.log(files["cover"][0]);
+
+    //path para diferentes sistemas operativos.
     const fileName = path.basename(fileInfo.path);
-    console.log(fileName);
+
     s3Client.upload(
       {
         Bucket: "denis-twitter-clone",
