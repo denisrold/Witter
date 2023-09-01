@@ -12,6 +12,8 @@ export default function Cover() {
 
   function updateImage(files, e) {
     e.preventDefault();
+    setIsFileNearby(false);
+    setIsFileOver(false);
     setIsUploading(true);
     const data = new FormData();
     data.append("cover", files[0]);
@@ -35,7 +37,7 @@ export default function Cover() {
       onFrameDragLeave={() => setIsFileNearby(false)}
     >
       <div className={"h-36 bg-twitterBorder" + extraClasses}>
-        {isFileNearby ? "Nearby" : "No Nearby"}
+        {isUploading ? "upload" : ""}
       </div>
     </FileDrop>
   );
