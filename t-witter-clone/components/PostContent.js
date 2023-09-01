@@ -45,6 +45,7 @@ export default function PostContent({
             <div>
               <Link href={`/${author?.username}/status/${_id}`}>{text}</Link>
               <PostButtons
+                username={author?.username}
                 id={_id}
                 likesCounts={likesCount}
                 likedByMe={likedByMe}
@@ -71,6 +72,7 @@ export default function PostContent({
             </div>
           )}
           <PostButtons
+            username={author?.username}
             id={_id}
             likesCounts={likesCount}
             likedByMe={likedByMe}
