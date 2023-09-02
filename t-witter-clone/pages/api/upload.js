@@ -20,8 +20,10 @@ export default async function handle(req, res) {
       throw err;
     }
     const userId = fields["userId"][0];
-    const fileInfo = files["cover"][0];
+    //const fileInfo = files["cover"][0];
 
+    const type = Object.keys(files)[0];
+    const fileInfo = files[type][0];
     //path para diferentes sistemas operativos.
     const fileName = path.basename(fileInfo.path);
 
@@ -35,8 +37,9 @@ export default async function handle(req, res) {
       },
       async (err, data) => {
         const user = await User.findByIdAndUpdate(userId, {
-          cover: data.Location,
+          [type]: data.Location,
         });
+        fs.unlinkSync(fileInfo.path);
         res.json({ err, data, fileInfo, source: data.Location });
       }
     );

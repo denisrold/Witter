@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
 import useUserInfo from "@/hooks/useUserInfo";
 
-export default function EditableImage({ type, src, onChange, className }) {
+export default function EditableImage({
+  type,
+  src,
+  onChange,
+  className,
+  editable = false,
+}) {
   const { userInfo, status: userInfoStatus } = useUserInfo();
   const [isFileNearby, setIsFileNearby] = useState(false);
   const [isFileOver, setIsFileOver] = useState(false);
@@ -20,10 +26,16 @@ export default function EditableImage({ type, src, onChange, className }) {
   }, [userInfoStatus]);
 
   let extraClasses = "";
-  if (isFileNearby) extraClasses = " bg-blue-500 opacity-30";
-  if (isFileOver) extraClasses = "  bg-blue-500 opacity-60";
 
+  if (isFileNearby) extraClasses = " bg-blue-500 opacity-50";
+  if (isFileOver) extraClasses = "  bg-blue-500 opacity-80";
+  if (!editable) {
+    extraClasses = "";
+  }
   async function updateImage(files, e) {
+    if (!editable) {
+      return;
+    }
     e.preventDefault();
     setIsFileNearby(false);
     setIsFileOver(false);
@@ -53,6 +65,10 @@ export default function EditableImage({ type, src, onChange, className }) {
       }}
       onFrameDragEnter={() => setIsFileNearby(true)}
       onFrameDragLeave={() => setIsFileNearby(false)}
+      onFrameDrop={() => {
+        setIsFileNearby(false);
+        setIsFileOver(false);
+      }}
     >
       <div className={" bg-twitterBorder relative"}>
         <div className={"absolute inset-0" + extraClasses}></div>

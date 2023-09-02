@@ -58,11 +58,17 @@ export default function UserPage() {
           <Cover
             src={profileInfo?.cover}
             onChange={(src) => updateUserImage("cover", src)}
+            editable={true}
           />
           <div className="flex justify-between">
             <div className="ml-5 relative">
-              <div className="absolute border-4 border-black rounded-full -top-12">
-                <Avatar big src={profileInfo?.image} editable={true} />
+              <div className="absolute border-4 border-black rounded-full -top-12 overflow-hidden">
+                <Avatar
+                  big
+                  src={profileInfo?.image}
+                  editable={true}
+                  onChange={(src) => updateUserImage("image", src)}
+                />
               </div>
             </div>
             <div className="p-2">
