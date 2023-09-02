@@ -33,11 +33,14 @@ export default function Cover({ src }) {
     fetch("/api/upload", {
       method: "POST",
       body: data,
-    }).then((response) => {
-      const cover = response.data.user.cover;
+    }).then(async (response) => {
+      const json = await response.json();
+      const cover = json?.data?.user?.cover;
+      setCoverImage(cover);
       setIsUploading(false);
     });
   }
+
   return (
     <FileDrop
       onDrop={updateImage}
@@ -50,9 +53,14 @@ export default function Cover({ src }) {
       onFrameDragEnter={() => setIsFileNearby(true)}
       onFrameDragLeave={() => setIsFileNearby(false)}
     >
-      <div className={"h-36 bg-twitterBorder" + extraClasses}>
+      <div
+        className={
+          "flex items-center overflow-hidden h-36 bg-twitterBorder" +
+          extraClasses
+        }
+      >
         {isUploading ? "upload" : ""}
-        <img src={src} alt=""></img>
+        <img src={src} alt="" className="w-full"></img>
       </div>
     </FileDrop>
   );
