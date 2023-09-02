@@ -1,26 +1,40 @@
 import { FileDrop } from "react-file-drop";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useUserInfo from "@/hooks/useUserInfo";
 
-export default function Cover() {
+export default function Cover({ src }) {
+  const { userInfo, status: userInfoStatus } = useUserInfo();
   const [isFileNearby, setIsFileNearby] = useState(false);
   const [isFileOver, setIsFileOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [userId, setUserId] = useState();
+
+  async function getUserInfo() {
+    let userID = await userInfo?._id;
+    setUserId(userID);
+  }
+
+  useEffect(() => {
+    getUserInfo();
+  }, [userInfoStatus]);
 
   let extraClasses = "";
   if (isFileNearby) extraClasses += " opacity-80";
   if (isFileOver) extraClasses += " opacity-60";
 
-  function updateImage(files, e) {
+  async function updateImage(files, e) {
     e.preventDefault();
     setIsFileNearby(false);
     setIsFileOver(false);
     setIsUploading(true);
     const data = new FormData();
+    data.append("userId", userId);
     data.append("cover", files[0]);
     fetch("/api/upload", {
       method: "POST",
       body: data,
-    }).then(() => {
+    }).then((response) => {
+      const cover = response.data.user.cover;
       setIsUploading(false);
     });
   }
@@ -38,6 +52,7 @@ export default function Cover() {
     >
       <div className={"h-36 bg-twitterBorder" + extraClasses}>
         {isUploading ? "upload" : ""}
+        <img src={src} alt=""></img>
       </div>
     </FileDrop>
   );

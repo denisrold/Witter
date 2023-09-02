@@ -2,6 +2,7 @@ import multyparty from "multiparty";
 import S3 from "aws-sdk/clients/s3";
 import fs from "fs";
 import path from "path";
+import User from "@/models/users";
 export default async function handle(req, res) {
   const s3Client = new S3({
     region: "sa-east-1",
@@ -18,7 +19,7 @@ export default async function handle(req, res) {
     if (err) {
       throw err;
     }
-
+    const userId = fields["userId"][0];
     const fileInfo = files["cover"][0];
 
     //path para diferentes sistemas operativos.
@@ -32,8 +33,11 @@ export default async function handle(req, res) {
         Key: fileName,
         ContentType: fileInfo.headers["content-type"],
       },
-      (err, data) => {
-        res.json({ err, data, fileInfo });
+      async (err, data) => {
+        const user = await User.findByIdAndUpdate(userId, {
+          cover: data.Location,
+        });
+        res.json({ err, data, fileInfo, user });
       }
     );
   });
