@@ -8,14 +8,15 @@ export default function Cover({ src }) {
   const [isFileOver, setIsFileOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [userId, setUserId] = useState();
+  const [newCover, setNewCover] = useState();
 
   async function getUserInfo() {
     let userID = await userInfo?._id;
     setUserId(userID);
   }
-
   useEffect(() => {
     getUserInfo();
+    setNewCover(src);
   }, [userInfoStatus]);
 
   let extraClasses = "";
@@ -35,8 +36,8 @@ export default function Cover({ src }) {
       body: data,
     }).then(async (response) => {
       const json = await response.json();
-      const cover = json?.data?.user?.cover;
-      setCoverImage(cover);
+      const cover = await json.userCover.cover;
+      setNewCover(cover);
       setIsUploading(false);
     });
   }
@@ -59,8 +60,8 @@ export default function Cover({ src }) {
           extraClasses
         }
       >
-        {isUploading ? "upload" : ""}
-        <img src={src} alt="" className="w-full"></img>
+        {isUploading && <div>upload</div>}
+        {!isUploading && <img src={newCover} alt="" className="w-full"></img>}
       </div>
     </FileDrop>
   );

@@ -37,7 +37,8 @@ export default async function handle(req, res) {
         const user = await User.findByIdAndUpdate(userId, {
           cover: data.Location,
         });
-        res.json({ err, data, fileInfo, user });
+        const userCover = await User.findById(userId);
+        res.json({ err, data, fileInfo, userCover });
       }
     );
   });
