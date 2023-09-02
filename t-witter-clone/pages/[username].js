@@ -45,6 +45,9 @@ export default function UserPage() {
     }
   }, [userInfo || profileInfo]);
 
+  function updateUserImage(type, src) {
+    setProfileInfo((prev) => ({ ...prev, [type]: src }));
+  }
   return (
     <Layout>
       {!!profileInfo && (
@@ -56,7 +59,7 @@ export default function UserPage() {
           <div className="flex justify-between">
             <div className="ml-5 relative">
               <div className="absolute border-4 border-black rounded-full -top-12">
-                <Avatar big src={profileInfo?.image} />
+                <Avatar big src={profileInfo?.image} editable={true} />
               </div>
             </div>
             <div className="p-2">
