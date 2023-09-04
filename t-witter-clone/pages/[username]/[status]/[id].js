@@ -38,7 +38,10 @@ export default function PostPage() {
           <TopNavLink />
           {post.parent && (
             <div className="pb-1">
-              <PostContent {...post.parent} />
+              <PostContent
+                {...post.parent}
+                likedByMe={repliesLikedByMe.includes(post.parent._id)}
+              />
               <div className="ml-5 h-12 relative">
                 <div
                   className="h-20 border-l-2 border-twitterBorder absolute -top-5"

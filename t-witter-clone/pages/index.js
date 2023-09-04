@@ -62,7 +62,10 @@ export default function Home() {
               <div className="border-t border-twitterBorder p-5">
                 {p.parent && (
                   <div>
-                    <PostContent {...p.parent} />
+                    <PostContent
+                      {...p.parent}
+                      likedByMe={idsLikedByMe.includes(p.parent._id)}
+                    />
                     <div className="relative h-8">
                       <div className="absolute border-l-2 border-twitterBorder h-11 -top-5 ml-6"></div>
                     </div>
