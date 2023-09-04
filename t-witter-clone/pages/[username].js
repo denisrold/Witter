@@ -13,6 +13,7 @@ export default function UserPage() {
   const router = useRouter();
   const { username } = router.query;
   const [profileInfo, setProfileInfo] = useState();
+  const [originalUserInfo, setOriginalUserInfo] = useState();
   const [posts, setPosts] = useState([]);
   const [postsLikedByMe, setPostsLikedByMe] = useState([]);
   const [editMode, setEditMode] = useState(false);
@@ -20,6 +21,7 @@ export default function UserPage() {
   async function fetchProfile() {
     await axios.get("/api/users?username=" + username).then((response) => {
       setProfileInfo(response.data.user);
+      setOriginalUserInfo(response.data.user);
     });
   }
   async function fetchProfilePosts() {
@@ -50,6 +52,31 @@ export default function UserPage() {
   function updateUserImage(type, src) {
     setProfileInfo((prev) => ({ ...prev, [type]: src }));
   }
+  //save profile
+  async function updateProfile() {
+    const { bio, name, username } = profileInfo;
+    const userId = userInfo?._id;
+
+    await axios.put("/api/profile", {
+      bio,
+      name,
+      username,
+      userId,
+    });
+    setEditMode(false);
+  }
+  //cancel editProfile
+  function cancel() {
+    setProfileInfo((prev) => {
+      const { name, username } = originalUserInfo;
+      let bio = "";
+      if (originalUserInfo.bio) {
+        bio = originalUserInfo.bio;
+      }
+      return { ...prev, bio, name, username };
+    });
+    setEditMode(false);
+  }
   //edit Button
   const myProfile = profileInfo?._id === userInfo?._id;
 
@@ -63,7 +90,7 @@ export default function UserPage() {
           <Cover
             src={profileInfo?.cover}
             onChange={(src) => updateUserImage("cover", src)}
-            editable={true}
+            editable={myProfile}
           />
           <div className="flex justify-between">
             <div className="ml-5 relative">
@@ -71,7 +98,7 @@ export default function UserPage() {
                 <Avatar
                   big
                   src={profileInfo?.image}
-                  editable={true}
+                  editable={myProfile}
                   onChange={(src) => updateUserImage("image", src)}
                 />
               </div>
@@ -84,24 +111,100 @@ export default function UserPage() {
               )}
               {myProfile && (
                 <div>
-                  <button
-                    onClick={() => {
-                      setEditMode(true);
-                    }}
-                    className="bg-twitterBlue text-white py-2 px-5 rounded-full"
-                  >
-                    Edit Button
-                  </button>
+                  {!editMode && (
+                    <button
+                      onClick={() => {
+                        setEditMode(true);
+                      }}
+                      className="bg-twitterBlue text-white py-2 px-5 rounded-full"
+                    >
+                      Edit Button
+                    </button>
+                  )}
+                  {editMode && (
+                    <div>
+                      {" "}
+                      <button
+                        onClick={() => {
+                          cancel();
+                        }}
+                        className="bg-twitterWhite text-black py-2 px-5 rounded-full mr-2"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          updateProfile();
+                        }}
+                        className="bg-twitterBlue text-white py-2 px-5 rounded-full"
+                      >
+                        Save profile
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           </div>
           <div className="px-5 mt-2">
-            <h1 className="font-bold text-xl leading-5">{profileInfo?.name}</h1>
-            <h2 className="text-twitterLightGray text-sm">
-              @{profileInfo?.username}
-            </h2>
-            <div className="text-sm mt-2 mb-2">Mars & Cars, Chips & Dips</div>
+            {!editMode && (
+              <h1 className="font-bold text-xl leading-5">
+                {profileInfo?.name}
+              </h1>
+            )}
+            {editMode && (
+              <div>
+                <input
+                  type="text"
+                  value={profileInfo?.name}
+                  onChange={(ev) => {
+                    setProfileInfo((prev) => ({
+                      ...prev,
+                      name: ev.target.value,
+                    }));
+                  }}
+                  className="bg-twitterBorder p-2 rounded-full mb-2"
+                ></input>
+              </div>
+            )}
+            {!editMode && (
+              <h2 className="text-twitterLightGray text-sm">
+                @{profileInfo?.username}
+              </h2>
+            )}
+            {editMode && (
+              <div>
+                <input
+                  type="text"
+                  value={profileInfo?.username}
+                  onChange={(ev) => {
+                    setProfileInfo((prev) => ({
+                      ...prev,
+                      username: ev.target.value,
+                    }));
+                  }}
+                  className="bg-twitterBorder p-2 rounded-full mb-2"
+                ></input>
+              </div>
+            )}
+            {!editMode && (
+              <div className="text-sm mt-2 mb-2">{profileInfo?.bio}</div>
+            )}
+            {editMode && (
+              <div>
+                <textarea
+                  type="text"
+                  value={profileInfo?.bio}
+                  onChange={(ev) => {
+                    setProfileInfo((prev) => ({
+                      ...prev,
+                      bio: ev.target.value,
+                    }));
+                  }}
+                  className="bg-twitterBorder p-2 rounded-2xl mb-2 w-full block"
+                />
+              </div>
+            )}
           </div>
         </div>
       )}

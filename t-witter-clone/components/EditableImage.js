@@ -80,11 +80,10 @@ export default function EditableImage({
             <PulseLoader size={16} color="#fff" />
           </div>
         )}
-        {src && (
-          <div className={"flex items-center overflow-hidden " + className}>
-            <img src={src} alt="" className="w-full"></img>
-          </div>
-        )}
+
+        <div className={"cover flex items-center overflow-hidden " + className}>
+          {src && <img src={src} alt="" className="w-full"></img>}
+        </div>
       </div>
     </FileDrop>
   );
