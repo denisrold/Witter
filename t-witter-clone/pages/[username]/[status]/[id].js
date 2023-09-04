@@ -33,10 +33,23 @@ export default function PostPage() {
 
   return (
     <Layout>
-      {post && (
+      {!!post?._id && (
         <div className="px-5 py-2">
           <TopNavLink />
-          <PostContent {...post} big={true} />
+          {post.parent && (
+            <div className="pb-1">
+              <PostContent {...post.parent} />
+              <div className="ml-5 h-12 relative">
+                <div
+                  className="h-20 border-l-2 border-twitterBorder absolute -top-5"
+                  style={{ marginLeft: "2px" }}
+                ></div>
+              </div>
+            </div>
+          )}
+          <div>
+            <PostContent {...post} big={true} />
+          </div>
         </div>
       )}
       {!!userInfo && (
