@@ -15,6 +15,8 @@ export default function UserPage() {
   const [profileInfo, setProfileInfo] = useState();
   const [posts, setPosts] = useState([]);
   const [postsLikedByMe, setPostsLikedByMe] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+
   async function fetchProfile() {
     await axios.get("/api/users?username=" + username).then((response) => {
       setProfileInfo(response.data.user);
@@ -48,6 +50,9 @@ export default function UserPage() {
   function updateUserImage(type, src) {
     setProfileInfo((prev) => ({ ...prev, [type]: src }));
   }
+  //edit Button
+  const myProfile = profileInfo?._id === userInfo?._id;
+
   return (
     <Layout>
       {!!profileInfo && (
@@ -72,9 +77,23 @@ export default function UserPage() {
               </div>
             </div>
             <div className="p-2">
-              <button className="bg-twitterBlue text-white py-2 px-5 rounded-full">
-                Follow
-              </button>
+              {!myProfile && (
+                <button className="bg-twitterBlue text-white py-2 px-5 rounded-full">
+                  Follow
+                </button>
+              )}
+              {myProfile && (
+                <div>
+                  <button
+                    onClick={() => {
+                      setEditMode(true);
+                    }}
+                    className="bg-twitterBlue text-white py-2 px-5 rounded-full"
+                  >
+                    Edit Button
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           <div className="px-5 mt-2">
