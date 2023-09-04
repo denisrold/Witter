@@ -7,7 +7,7 @@ export default function useUserInfo() {
   const { data: session, status: sessionStatus } = useSession();
   const [status, setStatus] = useState("loading");
 
-  function getUserInfo() {
+  async function getUserInfo() {
     if (sessionStatus === "loading") {
       return;
     }
@@ -15,15 +15,20 @@ export default function useUserInfo() {
       setStatus("unauthenticated");
       return;
     }
-    fetch("/api/users?id=" + session?.user?.id).then((response) => {
-      response.json().then((json) => {
-        setUserInfo(json.user);
-        setStatus("authenticted");
+    if (!userInfo) {
+      await fetch("/api/users?id=" + session?.user?.id).then((response) => {
+        response.json().then((json) => {
+          setUserInfo(json.user);
+          setStatus("authenticted");
+        });
       });
-    });
+    }
   }
   //dependency status of session.
   useEffect(() => {
+    if (userInfo) {
+      return;
+    }
     getUserInfo();
   }, [sessionStatus]);
 

@@ -3,7 +3,7 @@ import Like from "@/models/Like";
 import Post from "@/models/Post";
 
 async function updateLikesCount(postId) {
-  const post = await await Post.findByIdAndUpdate(
+  const post = await Post.findByIdAndUpdate(
     postId,
     { $inc: { likesCount: 1 } },
     { new: true }

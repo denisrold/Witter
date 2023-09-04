@@ -1,6 +1,7 @@
 import { initMongoose } from "@/lib/mongoose";
 import Post from "../../models/Post";
 import Like from "@/models/Like";
+import Follower from "@/models/Follower";
 
 export default async function handler(req, res) {
   await initMongoose();
@@ -21,7 +22,18 @@ export default async function handler(req, res) {
       const author = req.query?.author?.split("AND")[0] || null;
       const userID = req.query?.author?.split("AND")[1] || null;
 
-      const searchFilter = author ? { author } : { parent };
+      let searchFilter;
+      if (!author && !parent) {
+        const myFollows = await Follower.find({ source: userId }).exec();
+        const idsOfPeopleIFollow = myFollows.map((f) => f.destination);
+        searchFilter = { author: [...idsOfPeopleIFollow, userId] };
+      }
+      if (author) {
+        searchFilter = { author };
+      }
+      if (parent) {
+        searchFilter = { parent };
+      }
       const posts = await Post.find(searchFilter)
         .populate("author")
         .sort({ createdAt: -1 })

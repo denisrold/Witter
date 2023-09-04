@@ -14,7 +14,8 @@ export default function Home() {
   const [idsLikedByMe, setIdsLikeByMe] = useState("");
   const router = useRouter();
 
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  // console.log({ aca: session?.user?.id });
 
   async function fetchHomePost() {
     const userId = await userInfo?._id;

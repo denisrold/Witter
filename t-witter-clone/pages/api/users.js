@@ -1,14 +1,23 @@
 import User from "../../models/users";
 import { initMongoose } from "../../lib/mongoose";
+import Follower from "@/models/Follower";
 
 export default async function handle(req, res) {
   await initMongoose();
   if (req.method === "GET") {
-    const { id, username } = req.query;
+    let follow = "";
+    const { id, username, userInfo } = req.query;
+    console.log(req.query);
     const user = id
       ? await User.findById(id)
       : await User.findOne({ username });
-    res.json({ user });
+    if (username && userInfo) {
+      follow = await Follower.findOne({
+        source: userInfo,
+        destination: user._id,
+      });
+    }
+    res.json({ user, follow });
   }
 
   if (req.method === "PUT") {
