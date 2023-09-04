@@ -22,8 +22,8 @@ export default async function handler(req, res) {
       res.json(post);
     } else {
       const parent = req.query.parent || null;
-      const author = req.query?.author?.split("AND")[0] || null;
-      const userID = req.query?.author?.split("AND")[1] || null;
+      const author = req.query?.author || null;
+      const userID = req.query?.userInfo || null;
 
       let searchFilter;
       if (!author && !parent) {

@@ -30,7 +30,9 @@ export default function UserPage() {
   }
   async function fetchProfilePosts() {
     await axios
-      .get("/api/posts?author=" + profileInfo?._id + "AND" + userInfo?._id)
+      .get(
+        "/api/posts?author=" + profileInfo?._id + "&userInfo=" + userInfo?._id
+      )
       .then((response) => {
         setPosts(response.data.posts);
         setPostsLikedByMe(response.data.idsLikedByMe);
