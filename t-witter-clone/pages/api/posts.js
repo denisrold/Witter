@@ -48,14 +48,12 @@ export default async function handler(req, res) {
         .exec();
 
       const ID = userID ? userID : userId;
-      //ver porque no llega nada en parents
 
       const postIds = posts.map((p) => p._id);
       const postLikedByMe = await Like.find({
         author: ID,
         post: { $in: postIds },
       });
-      console.log(postLikedByMe);
 
       const idsLikedByMe = postLikedByMe.map((like) => like.post);
       res.json({ posts, idsLikedByMe });

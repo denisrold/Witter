@@ -16,20 +16,28 @@ export default function PostPage() {
   const { userInfo } = useUserInfo();
 
   async function fetchData() {
-    await axios.get("/api/posts?id=" + id).then((response) => {
-      setPost(response.data);
-    });
-    await axios.get("/api/posts?parent=" + id).then((response) => {
-      setReplies(response.data.posts);
-      setRepliesLikedByMe(response.data.idsLikedByMe);
-    });
+    await axios
+      .get("/api/posts?id=" + id + "&userInfo =" + userInfo?._id)
+      .then((response) => {
+        setPost(response.data);
+        console.log(response.data);
+      });
+    if (!userInfo) {
+      return;
+    }
+    await axios
+      .get("/api/posts?parent=" + id + "&userInfo=" + userInfo?._id)
+      .then((response) => {
+        setReplies(response.data.posts);
+        setRepliesLikedByMe(response.data.idsLikedByMe);
+      });
   }
   useEffect(() => {
     if (!id) {
       return;
     }
     fetchData();
-  }, [id]);
+  }, [id, userInfo]);
 
   return (
     <Layout>
@@ -38,10 +46,7 @@ export default function PostPage() {
           <TopNavLink />
           {post.parent && (
             <div className="pb-1">
-              <PostContent
-                {...post.parent}
-                likedByMe={repliesLikedByMe.includes(post.parent._id)}
-              />
+              <PostContent {...post.parent} />
               <div className="ml-5 h-12 relative">
                 <div
                   className="h-20 border-l-2 border-twitterBorder absolute -top-5"
