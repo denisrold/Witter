@@ -28,7 +28,7 @@ export default function Home() {
   }
   async function logOut() {
     setUserInfo(null);
-    //await signOut();
+    await signOut();
   }
 
   useEffect(() => {
