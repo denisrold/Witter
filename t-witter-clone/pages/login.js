@@ -15,7 +15,7 @@ export default function LoginPage({ providers }) {
   return (
     <div className="flex items-center justify-center h-screen">
       {Object.values(providers).map((provider) => (
-        <div key={providers}>
+        <div key={provider.id}>
           <button
             onClick={async () => {
               await signIn(provider.id);
