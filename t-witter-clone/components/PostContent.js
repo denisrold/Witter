@@ -15,13 +15,15 @@ export default function PostContent({
   big = false,
 }) {
   function showImages() {
+    if (!images?.length) {
+      return;
+    }
     return (
-      <div>
-        {console.log({ images: images })}
+      <div className="flex -mx-2">
         {images.length > 0 &&
           images.map((img) => {
             return (
-              <div>
+              <div className="m-1" key={img}>
                 <img src={img} alt="" />
               </div>
             );

@@ -58,7 +58,7 @@ export default function Upload({ children, onUploadFinish }) {
             drop your images here
           </div>
         )}
-        {children}
+        {children({ isUploading })}
       </div>
     </FileDrop>
   );

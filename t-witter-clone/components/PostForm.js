@@ -4,6 +4,8 @@ import { useState } from "react";
 import Avatar from "./Avatar";
 import Upload from "./Upload";
 
+import { PulseLoader } from "react-spinners";
+
 export default function PostForm({
   onPost,
   compact,
@@ -36,25 +38,35 @@ export default function PostForm({
         </div>
         <div className="grow pl-2">
           <Upload onUploadFinish={(src) => setImages((prev) => [...prev, src])}>
-            <textarea
-              className={
-                (compact ? "h-10 " : "h-24 ") +
-                "w-full p-2 bg-transparent mt-1 text-twitterWhite"
-              }
-              placeholder={placeholder}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-            />
-          </Upload>
-
-          {images.length > 0 &&
-            images.map((img) => {
-              return (
-                <div>
-                  <img src={img} alt="" />
+            {({ isUploading }) => (
+              <div>
+                <textarea
+                  className={
+                    (compact ? "h-10 " : "h-24 ") +
+                    "w-full p-2 bg-transparent mt-1 text-twitterWhite"
+                  }
+                  placeholder={placeholder}
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                />
+                <div className="flex -mx-2">
+                  {images.length > 0 &&
+                    images.map((img) => {
+                      return (
+                        <div className="h-24 m-2" key={img}>
+                          <img src={img} alt="" className="h-24 w-24" />
+                        </div>
+                      );
+                    })}
+                  {isUploading && (
+                    <div className="h-24 w-24 m-2 bg-twitterBorder flex items-center justify-center">
+                      <PulseLoader size={12} color="#fff" />
+                    </div>
+                  )}
                 </div>
-              );
-            })}
+              </div>
+            )}
+          </Upload>
 
           {!compact && (
             <div className="text-right border-t border-twitterBorder pt-2 pb-2">
