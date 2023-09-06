@@ -59,7 +59,7 @@ export default function Home() {
         {posts.length &&
           posts.map((p) => {
             return (
-              <div className="border-t border-twitterBorder p-5" key={p}>
+              <div className="border-t border-twitterBorder p-5" key={p._id}>
                 {p.parent && (
                   <div>
                     <PostContent

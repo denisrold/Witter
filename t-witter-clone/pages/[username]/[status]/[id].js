@@ -74,7 +74,10 @@ export default function PostPage() {
         {replies.length > 0 &&
           replies.map((reply) => {
             return (
-              <div className="p-5 border-t border-twitterBorder" key={reply}>
+              <div
+                className="p-5 border-t border-twitterBorder"
+                key={reply._id}
+              >
                 <PostContent
                   {...reply}
                   likedByMe={repliesLikedByMe.includes(reply._id)}

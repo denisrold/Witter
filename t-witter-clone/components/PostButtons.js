@@ -77,7 +77,7 @@ export default function PostButtons({
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-5 h-5 fill-inherit  hover:text-red-500"
+          className="w-5 h-5 fill-inherit  hover:text-red-500"
         >
           <path
             stroke-linecap="round"
@@ -102,7 +102,7 @@ export default function PostButtons({
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-5 h-5 mr-1"
+          className="w-5 h-5 mr-1"
         >
           <path
             stroke-linecap="round"
