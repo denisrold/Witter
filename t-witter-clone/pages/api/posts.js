@@ -61,11 +61,12 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    const { text, parent, userId } = req.body;
+    const { text, parent, userId, images } = req.body;
     const post = await Post.create({
       author: userId,
       text,
       parent,
+      images,
     });
 
     if (parent) {

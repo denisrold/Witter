@@ -40,6 +40,7 @@ export default function EditableImage({
     setIsFileNearby(false);
     setIsFileOver(false);
     setIsUploading(true);
+
     const data = new FormData();
     data.append("userId", userId);
     data.append(type, files[0]);
