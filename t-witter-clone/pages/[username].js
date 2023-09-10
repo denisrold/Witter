@@ -6,10 +6,8 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PostContent from "@/components/PostContent";
-import useUserInfo from "@/hooks/useUserInfo";
 
 export default function UserPage() {
-  //const { userInfo, status: userInfoStatus } = useUserInfo();
   const router = useRouter();
   const { username } = router.query;
   const [profileInfo, setProfileInfo] = useState();
