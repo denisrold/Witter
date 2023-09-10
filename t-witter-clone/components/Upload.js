@@ -1,21 +1,19 @@
-import useUserInfo from "@/hooks/useUserInfo";
 import { useEffect, useState } from "react";
 import { FileDrop } from "react-file-drop";
 
 export default function Upload({ children, onUploadFinish }) {
-  const { userInfo, status: userInfoStatus } = useUserInfo();
   const [isFileNearby, setIsFileNearby] = useState(false);
   const [isFileOver, setIsFileOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [userId, setUserId] = useState();
 
   async function getUserInfo() {
-    let userID = await userInfo?._id;
+    const userID = localStorage.getItem("userId");
     setUserId(userID);
   }
   useEffect(() => {
     getUserInfo();
-  }, [userInfoStatus]);
+  }, []);
 
   function updateImage(files, e) {
     e.preventDefault();

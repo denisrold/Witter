@@ -11,19 +11,18 @@ export default function EditableImage({
   className,
   editable = false,
 }) {
-  const { userInfo, status: userInfoStatus } = useUserInfo();
   const [isFileNearby, setIsFileNearby] = useState(false);
   const [isFileOver, setIsFileOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [userId, setUserId] = useState();
 
   async function getUserInfo() {
-    let userID = await userInfo?._id;
+    const userID = localStorage.getItem("userId");
     setUserId(userID);
   }
   useEffect(() => {
     getUserInfo();
-  }, [userInfoStatus]);
+  }, []);
 
   let extraClasses = "";
 

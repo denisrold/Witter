@@ -5,19 +5,19 @@ import { useRouter } from "next/router";
 
 export default function UsernameForm() {
   const router = useRouter();
-  const { userInfo, status } = useUserInfo();
+  const { userInfo, userInfoStatus } = useUserInfo();
   const [username, setUserName] = useState("");
   const { data } = useSession();
 
   useEffect(() => {
-    if (status === "loading") {
+    if (userInfoStatus === "loading") {
       return;
     }
     if (username === "") {
       const defaultUseranme = userInfo?.email?.split("@")[0];
       setUserName(defaultUseranme.replace(/[^a-z]+/gi, ""));
     }
-  }, [status]);
+  }, [userInfoStatus]);
 
   async function handleFormSubmit(e) {
     const { user } = data;
@@ -32,7 +32,7 @@ export default function UsernameForm() {
     router.reload();
   }
 
-  if (status === "loading") {
+  if (userInfoStatus === "loading") {
     return "";
   }
   return (

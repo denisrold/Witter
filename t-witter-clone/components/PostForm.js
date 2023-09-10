@@ -13,15 +13,16 @@ export default function PostForm({
   placeholder = "What's happening?",
 }) {
   const [text, setText] = useState("");
-  const { userInfo, status } = useUserInfo();
+  const { userInfo, userInfoStatus } = useUserInfo();
   const [images, setImages] = useState([]);
-  if (status === "loading") {
+
+  if (userInfoStatus === "loading") {
     return "";
   }
 
   async function handlePostSubmit(e) {
     e.preventDefault();
-    const userId = userInfo?._id;
+    const userId = localStorage.getItem("userId");
     await axios.post("/api/posts", { text, userId, parent, images });
     setText("");
     setImages([]);

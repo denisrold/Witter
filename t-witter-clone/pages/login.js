@@ -3,13 +3,15 @@ import { useRouter } from "next/router";
 export default function LoginPage({ providers }) {
   //LoginSession
   const { data, status } = useSession();
-  //useSession have session.user.data -> console.log({data,status});
+
   const router = useRouter();
   if (status == "loading") {
     return "";
   }
   if (data) {
     router.push("/");
+    const userId = data.user.id;
+    localStorage.setItem("userId", userId);
   }
   //
   return (

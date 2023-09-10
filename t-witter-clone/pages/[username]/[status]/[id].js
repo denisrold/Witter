@@ -13,20 +13,20 @@ export default function PostPage() {
   const [post, setPost] = useState();
   const [replies, setReplies] = useState([]);
   const [repliesLikedByMe, setRepliesLikedByMe] = useState([]);
-  const { userInfo } = useUserInfo();
 
   async function fetchData() {
+    const userId = localStorage.getItem("userId");
     await axios
-      .get("/api/posts?id=" + id + "&userInfo =" + userInfo?._id)
+      .get("/api/posts?id=" + id + "&userInfo =" + userId)
       .then((response) => {
         setPost(response.data);
         console.log(response.data);
       });
-    if (!userInfo) {
+    if (!userId) {
       return;
     }
     await axios
-      .get("/api/posts?parent=" + id + "&userInfo=" + userInfo?._id)
+      .get("/api/posts?parent=" + id + "&userInfo=" + userId)
       .then((response) => {
         setReplies(response.data.posts);
         setRepliesLikedByMe(response.data.idsLikedByMe);
@@ -37,7 +37,7 @@ export default function PostPage() {
       return;
     }
     fetchData();
-  }, [id, userInfo]);
+  }, [id]);
 
   return (
     <Layout>
@@ -60,16 +60,16 @@ export default function PostPage() {
           </div>
         </div>
       )}
-      {!!userInfo && (
-        <div className="border-t border-twitterBorder p-5">
-          <PostForm
-            onPost={fetchData}
-            compact
-            parent={id}
-            placeholder={"Tweet your reply"}
-          />
-        </div>
-      )}
+
+      <div className="border-t border-twitterBorder p-5">
+        <PostForm
+          onPost={fetchData}
+          compact
+          parent={id}
+          placeholder={"Tweet your reply"}
+        />
+      </div>
+
       <div>
         {replies.length > 0 &&
           replies.map((reply) => {

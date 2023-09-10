@@ -9,7 +9,7 @@ import PostContent from "@/components/PostContent";
 import useUserInfo from "@/hooks/useUserInfo";
 
 export default function UserPage() {
-  const { userInfo, status: userInfoStatus } = useUserInfo();
+  //const { userInfo, status: userInfoStatus } = useUserInfo();
   const router = useRouter();
   const { username } = router.query;
   const [profileInfo, setProfileInfo] = useState();
@@ -18,10 +18,11 @@ export default function UserPage() {
   const [postsLikedByMe, setPostsLikedByMe] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [isFollowing, setIsfollowing] = useState(false);
+  const [userId, setUserId] = useState("");
 
   async function fetchProfile() {
     await axios
-      .get("/api/users?username=" + username + "&userInfo=" + userInfo?._id)
+      .get("/api/users?username=" + username + "&userInfo=" + userId)
       .then((response) => {
         setProfileInfo(response.data.user);
         setOriginalUserInfo(response.data.user);
@@ -30,9 +31,7 @@ export default function UserPage() {
   }
   async function fetchProfilePosts() {
     await axios
-      .get(
-        "/api/posts?author=" + profileInfo?._id + "&userInfo=" + userInfo?._id
-      )
+      .get("/api/posts?author=" + profileInfo?._id + "&userInfo=" + userId)
       .then((response) => {
         setPosts(response.data.posts);
         setPostsLikedByMe(response.data.idsLikedByMe);
@@ -40,24 +39,22 @@ export default function UserPage() {
   }
 
   useEffect(() => {
-    if (userInfoStatus == "loading") {
+    if (!username) {
       return;
     }
-    if (!username && !userInfo) {
+    const userID = localStorage.getItem("userId");
+    if (userID === "") {
       return;
     }
-    if (userInfo && userInfoStatus != "loading") {
-      fetchProfile();
-    }
-  }, [userInfoStatus]);
+    setUserId(userID);
+    fetchProfile();
+  }, [userId]);
 
   useEffect(() => {
     if (!profileInfo?._id) {
       return;
     }
-    if (userInfo && userInfoStatus != "loading") {
-      fetchProfilePosts();
-    }
+    fetchProfilePosts();
   }, [profileInfo]);
 
   function updateUserImage(type, src) {
@@ -66,7 +63,6 @@ export default function UserPage() {
   //save profile
   async function updateProfile() {
     const { bio, name, username } = profileInfo;
-    const userId = userInfo?._id;
 
     await axios.put("/api/profile", {
       bio,
@@ -90,7 +86,6 @@ export default function UserPage() {
   }
 
   function toggleFollow() {
-    const userId = userInfo?._id;
     setIsfollowing((prev) => !prev);
     axios.post("/api/followers", {
       destination: profileInfo._id,
@@ -99,7 +94,7 @@ export default function UserPage() {
   }
 
   //edit Button
-  const myProfile = profileInfo?._id === userInfo?._id;
+  const myProfile = profileInfo?._id === userId;
 
   return (
     <Layout>

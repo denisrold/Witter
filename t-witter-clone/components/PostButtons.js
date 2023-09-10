@@ -1,4 +1,3 @@
-import useUserInfo from "@/hooks/useUserInfo";
 import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
@@ -11,13 +10,11 @@ export default function PostButtons({
   likedByMe: likedByMeDefault = false,
   commentsCount,
 }) {
-  //si esto no funciona usar useSession
-  const { userInfo, status } = useUserInfo();
   const [likesCounts, setLikesCounts] = useState(likesCountsDefault);
   const [likedByMe, setLikedByMe] = useState(likedByMeDefault);
 
   async function toggleLike() {
-    const userId = userInfo._id;
+    const userId = localStorage.getItem("userId");
     const response = await axios.post("/api/like", { id: id, userId });
     if (response?.data?.like) {
       setLikesCounts((prev) => prev + 1);

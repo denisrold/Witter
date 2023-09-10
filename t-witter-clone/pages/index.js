@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import PostContent from "@/components/PostContent";
 import Layout from "@/components/Layout";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 
 export default function Home() {
@@ -14,11 +14,8 @@ export default function Home() {
   const [idsLikedByMe, setIdsLikeByMe] = useState("");
   const router = useRouter();
 
-  // const { data: session } = useSession();
-  // console.log({ aca: session?.user?.id });
-
   async function fetchHomePost() {
-    const userId = await userInfo?._id;
+    const userId = localStorage.getItem("userId");
     const post = await axios
       .get(`/api/posts?userId=${userId}`)
       .then((response) => {
@@ -28,6 +25,7 @@ export default function Home() {
   }
   async function logOut() {
     setUserInfo(null);
+    localStorage.removeItem("userId");
     await signOut();
   }
 
