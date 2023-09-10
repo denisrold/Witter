@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head />
-      <title>The Witter</title>
+      <title>Witter App</title>
       <link rel="shortcut icon" href="/witter.jpg" />
       <body>
         <Main />
