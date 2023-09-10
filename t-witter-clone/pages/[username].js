@@ -223,7 +223,7 @@ export default function UserPage() {
                       bio: ev.target.value,
                     }));
                   }}
-                  className="bg-twitterBorder p-2 rounded-2xl mb-2 w-full block resize-none"
+                  className="bg-twitterBorder p-2 rounded-2xl mb-2 w-full block resize-none outline-none"
                 />
               </div>
             )}

@@ -44,7 +44,7 @@ export default function PostForm({
                 <textarea
                   className={
                     (compact ? "h-10 " : "h-24 ") +
-                    "w-full p-2 bg-transparent mt-1 text-twitterWhite resize-none"
+                    "w-full p-2 bg-transparent mt-1 text-twitterWhite resize-none outline-none"
                   }
                   placeholder={placeholder}
                   value={text}
