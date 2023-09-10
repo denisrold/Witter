@@ -70,14 +70,14 @@ export default function Home() {
                   <div>
                     <PostContent
                       {...p.parent}
-                      likedByMe={idsLikedByMe.includes(p.parent._id)}
+                      likedByMe={idsLikedByMe.includes(p?.parent?._id)}
                     />
                     <div className="relative h-8">
                       <div className="absolute border-l-2 border-twitterBorder h-11 -top-5 ml-6"></div>
                     </div>
                   </div>
                 )}
-                <PostContent {...p} likedByMe={idsLikedByMe.includes(p._id)} />
+                <PostContent {...p} likedByMe={idsLikedByMe.includes(p?._id)} />
               </div>
             );
           })}

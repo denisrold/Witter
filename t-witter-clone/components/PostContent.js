@@ -2,6 +2,8 @@ import Link from "next/link";
 import Avatar from "./Avatar";
 import ReactTimeAgo from "react-time-ago";
 import PostButtons from "./PostButtons";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function PostContent({
   text,
@@ -14,6 +16,8 @@ export default function PostContent({
   images,
   big = false,
 }) {
+  const [idsLikedByMe, setIdsLikeByMe] = useState("");
+  const [likePost, setLikePost] = useState(false);
   function showImages() {
     if (!images?.length) {
       return;
@@ -31,6 +35,24 @@ export default function PostContent({
       </div>
     );
   }
+  async function fetchHomePost() {
+    if (idsLikedByMe.length > 0) {
+      return;
+    }
+    const userId = localStorage.getItem("userId");
+    const post = await axios
+      .get(`/api/posts?userId=${userId}`)
+      .then((response) => {
+        setIdsLikeByMe(response.data.idsLikedByMe);
+        setLikePost(idsLikedByMe.includes(_id));
+      });
+  }
+  useEffect(() => {
+    if (!idsLikedByMe.length) {
+      return;
+    }
+    fetchHomePost();
+  }, [idsLikedByMe]);
   return (
     <div>
       <div className="flex w-full">
@@ -101,11 +123,16 @@ export default function PostContent({
                 .join(" ")}
             </div>
           )}
+          {/*A Solucionar Este  */}
+          estoyAca {console.log({ esteId: _id })}
+          {console.log({ EstePost: likePost })}
+          {console.log({ likedBy: likedByMe })}
+          {console.log({ EsteArray: idsLikedByMe })}
           <PostButtons
             username={author?.username}
             id={_id}
             likesCounts={likesCount}
-            likedByMe={likedByMe}
+            likedByMe={true} //este Lograr conseguir el id del post y comparar con el ids de idslikebyme
             commentsCount={commentsCount}
           />
         </div>
