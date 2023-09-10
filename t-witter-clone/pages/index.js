@@ -36,14 +36,22 @@ export default function Home() {
   }, [userInfoStatus]);
 
   if (userInfoStatus === "loading") {
-    return "loading user info";
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <img src="/witterlogo.jpg" alt="" className="items-center w-20" />
+      </div>
+    );
   }
   if (userInfo && !userInfo?.username) {
     return <UsernameForm />;
   }
   if (!userInfo) {
     router.push("/login");
-    return "Not user Info;";
+    return (
+      <div className="flex items-center justify-center h-screen ">
+        <img src="/witterlogo.jpg" alt="" className="items-center w-20" />
+      </div>
+    );
   }
   return (
     <Layout>
