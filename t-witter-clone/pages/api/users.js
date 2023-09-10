@@ -7,7 +7,7 @@ export default async function handle(req, res) {
   if (req.method === "GET") {
     let follow = "";
     const { id, username, userInfo } = req.query;
-    console.log({ este: req.query });
+
     const user = id
       ? await User.findById(id)
       : await User.findOne({ username });

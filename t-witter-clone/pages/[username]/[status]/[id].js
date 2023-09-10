@@ -3,7 +3,6 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
-import useUserInfo from "@/hooks/useUserInfo";
 import PostForm from "@/components/PostForm";
 import TopNavLink from "@/components/TopNavLink";
 
@@ -20,7 +19,6 @@ export default function PostPage() {
       .get("/api/posts?id=" + id + "&userInfo =" + userId)
       .then((response) => {
         setPost(response.data);
-        console.log(response.data);
       });
     if (!userId) {
       return;
