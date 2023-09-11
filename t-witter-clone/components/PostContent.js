@@ -8,21 +8,23 @@ import axios from "axios";
 export default function PostContent({
   text,
   author,
+  booleanLike,
   createdAt,
   _id,
   likesCount,
-  likedByMe,
   commentsCount,
   images,
   big = false,
+  likedByMe,
 }) {
-  const [idsLikedByMe, setIdsLikeByMe] = useState("");
-  const [likePost, setLikePost] = useState(false);
-  const [flag, setFlag] = useState("no");
+  const [response, setResponse] = useState(false);
+  const [likesIds, setLikesIds] = useState({});
+
   function showImages() {
     if (!images?.length) {
       return;
     }
+
     return (
       <div className="flex -mx-2">
         {images.length > 0 &&
@@ -36,43 +38,26 @@ export default function PostContent({
       </div>
     );
   }
-
-  //Funcion de comparar likedpost con id post
-  function LikedPost() {
-    if (idsLikedByMe) {
-      const id = _id;
-      const response = idsLikedByMe?.includes(id);
-      setLikePost(response);
-      if (response == true) {
-        setFlag("Ok");
-      }
-      console.log(likePost);
-    }
-  }
-  async function fetchHomePost() {
-    if (idsLikedByMe.length > 0) {
-      return;
-    }
-    if (likePost == "true") {
-      return;
-    }
+  async function fetchOnePost() {
     const userId = localStorage.getItem("userId");
-    await axios.get(`/api/posts?userId=${userId}`).then((response) => {
-      setIdsLikeByMe(response.data.idsLikedByMe);
-      LikedPost();
-    });
+    const post = await axios
+      .get(`/api/onepost?userId=${userId}&postId=${_id}`)
+      .then((response) => {
+        setResponse(response.data);
+        let post = response.data.idsLikedByMe.includes(_id);
+        setLikesIds(post);
+      });
   }
-  //Fin de la funcion
-  useEffect(() => {
-    if (!_id || likePost == true) {
-      return;
-    }
-    if (_id) {
-      fetchHomePost();
 
-      LikedPost();
+  useEffect(() => {
+    if (!likesIds.length) {
+      if (big) {
+        fetchOnePost();
+      } else {
+        return;
+      }
     }
-  }, [flag]);
+  }, []);
   return (
     <div>
       <div className="flex w-full">
@@ -143,19 +128,15 @@ export default function PostContent({
                 .join(" ")}
             </div>
           )}
-          {/*A Solucionar Este  */}
-          estoyAca {console.log({ esteId: _id })}
-          {console.log({ EstoyProbandoEste: idsLikedByMe.includes(_id) })}
-          {console.log({ EstePost: likePost })}
-          {console.log({ EsteArray: idsLikedByMe })}
-          {console.log({ likedyme: likedByMe })}
-          <PostButtons
-            username={author?.username}
-            id={_id}
-            likesCounts={likesCount}
-            likedByMe={true} //este Lograr conseguir el id del post y comparar con el ids de idslikebyme
-            commentsCount={commentsCount}
-          />
+          {response && (
+            <PostButtons
+              username={author?.username}
+              id={_id}
+              likesCounts={likesCount}
+              likedByMe={likesIds}
+              commentsCount={commentsCount}
+            />
+          )}
         </div>
       )}
     </div>
