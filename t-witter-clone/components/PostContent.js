@@ -40,17 +40,17 @@ export default function PostContent({
   }
   async function fetchOnePost() {
     const userId = localStorage.getItem("userId");
-    const post = await axios
+    await axios
       .get(`/api/onepost?userId=${userId}&postId=${_id}`)
       .then((response) => {
-        setResponse(response.data);
-        let post = response.data.idsLikedByMe.includes(_id);
+        setResponse(response?.data);
+        let post = response?.data?.idsLikedByMe?.includes(_id);
         setLikesIds(post);
       });
   }
 
   useEffect(() => {
-    if (!likesIds.length) {
+    if (!likesIds.length && _id) {
       if (big) {
         fetchOnePost();
       } else {

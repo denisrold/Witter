@@ -7,10 +7,13 @@ export default async function handler(req, res) {
 
   if (req.method === "GET") {
     let userId = "";
+    let postId = "";
     if (req.query.userId != "undefined") {
       userId = req.query.userId;
     }
-    const postId = req?.query?.postId;
+    if (req?.query?.postId != "undefined") {
+      postId = req?.query?.postId;
+    }
 
     const post = await Post.findById(postId)
       .populate("author")
@@ -27,7 +30,6 @@ export default async function handler(req, res) {
     });
 
     const idsLikedByMe = postLikedByMe.map((like) => like.post);
-    console.log(idsLikedByMe);
     res.json({ post, idsLikedByMe });
   }
 }
