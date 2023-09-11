@@ -18,6 +18,7 @@ export default function PostContent({
 }) {
   const [idsLikedByMe, setIdsLikeByMe] = useState("");
   const [likePost, setLikePost] = useState(false);
+  const [flag, setFlag] = useState("no");
   function showImages() {
     if (!images?.length) {
       return;
@@ -35,24 +36,43 @@ export default function PostContent({
       </div>
     );
   }
+
+  //Funcion de comparar likedpost con id post
+  function LikedPost() {
+    if (idsLikedByMe) {
+      const id = _id;
+      const response = idsLikedByMe?.includes(id);
+      setLikePost(response);
+      if (response == true) {
+        setFlag("Ok");
+      }
+      console.log(likePost);
+    }
+  }
   async function fetchHomePost() {
     if (idsLikedByMe.length > 0) {
       return;
     }
-    const userId = localStorage.getItem("userId");
-    const post = await axios
-      .get(`/api/posts?userId=${userId}`)
-      .then((response) => {
-        setIdsLikeByMe(response.data.idsLikedByMe);
-        setLikePost(idsLikedByMe.includes(_id));
-      });
-  }
-  useEffect(() => {
-    if (!idsLikedByMe.length) {
+    if (likePost == "true") {
       return;
     }
-    fetchHomePost();
-  }, [idsLikedByMe]);
+    const userId = localStorage.getItem("userId");
+    await axios.get(`/api/posts?userId=${userId}`).then((response) => {
+      setIdsLikeByMe(response.data.idsLikedByMe);
+      LikedPost();
+    });
+  }
+  //Fin de la funcion
+  useEffect(() => {
+    if (!_id || likePost == true) {
+      return;
+    }
+    if (_id) {
+      fetchHomePost();
+
+      LikedPost();
+    }
+  }, [flag]);
   return (
     <div>
       <div className="flex w-full">
@@ -125,9 +145,10 @@ export default function PostContent({
           )}
           {/*A Solucionar Este  */}
           estoyAca {console.log({ esteId: _id })}
+          {console.log({ EstoyProbandoEste: idsLikedByMe.includes(_id) })}
           {console.log({ EstePost: likePost })}
-          {console.log({ likedBy: likedByMe })}
           {console.log({ EsteArray: idsLikedByMe })}
+          {console.log({ likedyme: likedByMe })}
           <PostButtons
             username={author?.username}
             id={_id}
