@@ -12,7 +12,6 @@ export default function Home() {
   const { userInfo, setUserInfo, status: userInfoStatus } = useUserInfo();
   const [posts, setPosts] = useState([]);
   const [idsLikedByMe, setIdsLikeByMe] = useState("");
-  const boleans = false;
   const router = useRouter();
 
   async function fetchHomePost() {

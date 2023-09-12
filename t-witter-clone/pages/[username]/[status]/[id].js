@@ -15,11 +15,13 @@ export default function PostPage() {
 
   async function fetchData() {
     const userId = localStorage.getItem("userId");
-    await axios
-      .get("/api/posts?id=" + id + "&userInfo =" + userId)
-      .then((response) => {
-        setPost(response.data);
-      });
+    if (userId) {
+      await axios
+        .get("/api/posts?id=" + id + "&userInfo =" + userId)
+        .then((response) => {
+          setPost(response.data);
+        });
+    }
     if (!userId) {
       return;
     }
