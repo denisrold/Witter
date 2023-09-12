@@ -17,12 +17,12 @@ export default function Home() {
 
   async function fetchHomePost() {
     const userId = localStorage.getItem("userId");
-    const post = await axios
-      .get(`/api/posts?userId=${userId}`)
-      .then((response) => {
+    if (userId) {
+      await axios.get(`/api/posts?userId=${userId}`).then((response) => {
         setPosts(response?.data?.posts);
         setIdsLikeByMe(response?.data?.idsLikedByMe);
       });
+    }
   }
   async function logOut() {
     setUserInfo(null);
