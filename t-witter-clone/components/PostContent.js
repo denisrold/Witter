@@ -8,7 +8,6 @@ import axios from "axios";
 export default function PostContent({
   text,
   author,
-  booleanLike,
   createdAt,
   _id,
   likesCount,
@@ -40,21 +39,21 @@ export default function PostContent({
   }
   async function fetchOnePost() {
     const userId = localStorage.getItem("userId");
-    await axios
-      .get(`/api/onepost?userId=${userId}&postId=${_id}`)
-      .then((response) => {
-        setResponse(response?.data);
-        let post = response?.data?.idsLikedByMe?.includes(_id);
-        setLikesIds(post);
-      });
+    if (userId) {
+      await axios
+        .get(`/api/onepost?userId=${userId}&postId=${_id}`)
+        .then((response) => {
+          setResponse(response?.data);
+          let post = response?.data?.idsLikedByMe?.includes(_id);
+          setLikesIds(post);
+        });
+    }
   }
 
   useEffect(() => {
     if (!likesIds.length && _id) {
       if (big) {
         fetchOnePost();
-      } else {
-        return;
       }
     }
   }, []);

@@ -15,14 +15,14 @@ export default function PostPage() {
 
   async function fetchData() {
     const userId = localStorage.getItem("userId");
-    if (userId) {
+    if (userId && id) {
       await axios
         .get("/api/posts?id=" + id + "&userInfo =" + userId)
         .then((response) => {
           setPost(response.data);
         });
     }
-    if (!userId) {
+    if (!userId || id) {
       return;
     }
     await axios
@@ -37,7 +37,7 @@ export default function PostPage() {
       return;
     }
     fetchData();
-  }, [id]);
+  }, []);
 
   return (
     <Layout>
