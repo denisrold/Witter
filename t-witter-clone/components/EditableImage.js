@@ -1,8 +1,7 @@
 import { FileDrop } from "react-file-drop";
 import { useEffect, useState } from "react";
-
+import Image from "next/image";
 import { PulseLoader } from "react-spinners";
-import useUserInfo from "@/hooks/useUserInfo";
 
 export default function EditableImage({
   type,
