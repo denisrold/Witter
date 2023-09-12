@@ -128,6 +128,15 @@ export default function PostContent({
                 .join(" ")}
             </div>
           )}
+          {!response && (
+            <PostButtons
+              username={author?.username}
+              id={_id}
+              likesCounts={0}
+              likedByMe={false}
+              commentsCount={commentsCount}
+            />
+          )}
           {response && (
             <PostButtons
               username={author?.username}

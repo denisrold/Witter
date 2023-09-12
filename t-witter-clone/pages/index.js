@@ -20,8 +20,8 @@ export default function Home() {
     const post = await axios
       .get(`/api/posts?userId=${userId}`)
       .then((response) => {
-        setPosts(response.data.posts);
-        setIdsLikeByMe(response.data.idsLikedByMe);
+        setPosts(response?.data?.posts);
+        setIdsLikeByMe(response?.data?.idsLikedByMe);
       });
   }
   async function logOut() {
